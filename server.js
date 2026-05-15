@@ -15,10 +15,17 @@ const adminRoutes = require('./routes/adminRoutes');
 // Initialize Express
 const app = express();
 
-// Middleware
+// =======================
+// MIDDLEWARE
+// =======================
 app.use(express.json());
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
-app.use(cors());
+
+// 🔥 FIXED CORS (IMPORTANT FOR VERCEL + MOBILE)
+app.use(cors({
+  origin: "*",
+  credentials: true
+}));
 
 // Serve static files
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
@@ -26,7 +33,9 @@ app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 // Connect to Database
 connectDB();
 
-// API Routes
+// =======================
+// API ROUTES
+// =======================
 app.use('/api/auth', authRoutes);
 app.use('/api/songs', songRoutes);
 app.use('/api/playlists', playlistRoutes);
@@ -57,8 +66,11 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Start Server
+// =======================
+// START SERVER
+// =======================
 const PORT = process.env.PORT || 5005;
+
 app.listen(PORT, () => {
   console.log(`\n╔═════════════════════════════════════╗`);
   console.log(`║  Music Streaming Server Started    ║`);
