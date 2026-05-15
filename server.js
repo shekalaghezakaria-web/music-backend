@@ -21,16 +21,16 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
-// ✅ FIXED CORS (MOBILE + VERCEL + LOCAL SAFE)
-app.use(cors({
-  origin: [
-    "http://localhost:8000",
-    "http://127.0.0.1:8000",
-    "https://zakariamusic.vercel.app"
-  ],
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
-}));
+// ✅ Open CORS for all origins to support mobile browsers and Vercel frontend.
+const corsOptions = {
+  origin: true,
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "Accept", "Origin", "X-Requested-With"],
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 // Serve static files
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
