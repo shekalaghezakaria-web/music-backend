@@ -1,0 +1,3 @@
+node_modules
+.env git add .
+git commit -m "clean project"
